@@ -1,0 +1,96 @@
+name: Lyra Builder · TryCloudflare tunnel (auto-refresh every 2h)
+
+on:
+  # ── every 2 hours at :00 UTC ─────────────────────────────
+  schedule:
+    - cron: '0 */2 * * *'
+
+  # ── manual trigger ──────────────────────────────────────
+  workflow_dispatch:
+
+  # ── restart when the builder itself changes ─────────────
+  push:
+    branches: [main]
+    paths:
+      - 'builder.html'
+      - 'scripts/server.py'
+      - '.github/workflows/builder-tunnel.yml'
+
+permissions:
+  contents: write        # needed to push dummy.txt / url.txt
+
+# Guarantees only ONE tunnel at a time. The new run kills the old one.
+concurrency:
+  group: lyra-builder
+  cancel-in-progress: true
+
+jobs:
+  tunnel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180           # 3h hard cap
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install flask requests
+
+      - name: Fetch cloudflared
+        run: |
+          curl -sSL -o cloudflared \
+            https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          chmod +x cloudflared
+
+      - name: Heartbeat + tunnel + save url.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAGES_URL: ${{ vars.PAGES_URL }}
+        run: |
+          # ── 1) edit dummy.txt every run (heartbeat) ─────────────
+          printf 'last-run: %s\nrun-id: %s\n' \
+            "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "${{ github.run_id }}" > dummy.txt
+
+          # ── 2) start builder + trycloudflare tunnel ─────────────
+          python scripts/server.py > server.log 2>&1 &
+          sleep 3
+          ./cloudflared tunnel --url http://127.0.0.1:5000 --no-autoupdate \
+            > tunnel.log 2>&1 &
+
+          URL=""
+          for i in $(seq 1 40); do
+            URL=$(grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' tunnel.log | head -1 || true)
+            [ -n "$URL" ] && break
+            sleep 2
+          done
+          if [ -z "$URL" ]; then
+            echo "❌ Tunnel failed:"; cat tunnel.log; exit 1
+          fi
+
+          # ── 3) write new URL to url.txt ─────────────────────────
+          printf 'url: %s\nupdated: %s\nrun: %s\n' \
+            "$URL" "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "${{ github.run_id }}" > url.txt
+
+          # ── 4) commit + push both files ─────────────────────────
+          git config user.name  "lyra-builder-bot"
+          git config user.email "lyra-bot@users.noreply.github.com"
+          git add dummy.txt url.txt
+          git commit -m "chore: refresh builder tunnel URL [skip ci]" \
+            || echo "no changes"
+          git pull --rebase origin main || true
+          git push || true
+
+          # ── 5) job summary ──────────────────────────────────────
+          {
+            echo "## 🚀 Lyra Builder is live"
+            echo ""
+            echo "**New URL:** $URL"
+            echo ""
+            echo "Saved to \`url.txt\` · next refresh in ≤2h."
+          } >> $GITHUB_STEP_SUMMARY
+
+          # ── 6) keep the tunnel alive until the next scheduled run
+          #      cancels this one (or timeout kills it) ───────────
+          sleep 10800
