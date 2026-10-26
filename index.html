@@ -20,7 +20,8 @@ animation:float 20s ease-in-out infinite}
 .b2{width:520px;height:520px;background:#0891b2;bottom:-160px;right:-140px;animation-delay:-8s}
 @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
 .wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 22px 80px}
-header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+header{display:flex;align-items:center;justify-content:space-between;
+padding:22px 0;flex-wrap:wrap;gap:12px}
 .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;
 font-weight:700;letter-spacing:-.02em}
 .logo .dot{width:26px;height:26px;border-radius:9px;
@@ -29,6 +30,7 @@ box-shadow:0 0 22px rgba(167,139,250,.55)}
 .nav{font-size:13px;color:var(--muted)}
 .nav a{color:inherit;text-decoration:none}
 .nav a:hover{color:var(--ink)}
+.nav b{color:var(--ink);font-weight:600}
 .hero{padding:52px 0 18px;text-align:center}
 .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;
 border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted);
@@ -56,7 +58,8 @@ color:var(--muted);font-size:12px;border:1px solid var(--line);
 padding:3px 8px;border-radius:6px}
 .pills{display:flex;gap:8px;justify-content:center;margin:22px 0 6px;flex-wrap:wrap}
 .pill{padding:8px 16px;border-radius:999px;border:1px solid var(--line);
-background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:.2s}
+background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;
+transition:.2s;user-select:none}
 .pill:hover{color:var(--ink);border-color:rgba(167,139,250,.4)}
 .pill.on{background:linear-gradient(120deg,rgba(167,139,250,.2),rgba(34,211,238,.12));
 border-color:rgba(167,139,250,.7);color:var(--ink)}
@@ -92,7 +95,7 @@ flex-wrap:wrap;gap:8px}
 backdrop-filter:blur(10px);display:none;flex-direction:column}
 .viewer.show{display:flex}
 .vbar{display:flex;align-items:center;gap:10px;padding:14px 18px;
-border-bottom:1px solid var(--line);background:#0b0b14}
+border-bottom:1px solid var(--line);background:#0b0b14;flex-wrap:wrap}
 .vdots{display:flex;gap:6px}
 .vdots i{width:11px;height:11px;border-radius:50%;display:block}
 .vdots i:nth-child(1){background:#f87171}
@@ -101,14 +104,19 @@ border-bottom:1px solid var(--line);background:#0b0b14}
 .vaddr{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);
 border-radius:10px;padding:8px 14px;font-family:ui-monospace,monospace;
 font-size:13px;color:var(--ink);overflow:hidden;white-space:nowrap;
-text-overflow:ellipsis}
+text-overflow:ellipsis;min-width:200px}
 .vaddr .lock{color:#34d399;margin-right:6px}
-.vbtns{display:flex;gap:6px}
+.vbtns{display:flex;gap:6px;flex-wrap:wrap}
 .vbtn{background:transparent;border:1px solid var(--line);color:var(--muted);
-padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inherit}
+padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;
+font-family:inherit;transition:.2s}
 .vbtn:hover{color:var(--ink);border-color:var(--violet)}
 .vbtn.close{color:var(--pink);border-color:rgba(244,114,182,.3)}
+.vbtn.close:hover{background:rgba(244,114,182,.1)}
 .viewer iframe{flex:1;border:0;background:#fff;width:100%}
+.err{color:var(--pink);font-size:13px;margin-top:10px;display:none;
+text-align:center}
+.err.show{display:block}
 </style>
 </head>
 <body>
@@ -117,18 +125,19 @@ padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inh
 <div class="wrap">
   <header>
     <div class="logo"><span class="dot"></span>Lyra Browser</div>
-    <div class="nav">served from GitHub Pages · <span style="color:var(--ink)">built by Muhammad Taqi</span></div>
+    <div class="nav">GitHub Pages · <b>built by Muhammad Taqi</b></div>
   </header>
 
   <section class="hero">
     <div class="chip"><span class="pulse"></span> Live registry</div>
     <h1>Browse the <span class="g">Lyra web</span>.</h1>
-    <p>Every site published through Lyra Builder, in one place. Type <code style="color:var(--cyan)">#taqi.mt</code> to jump straight in.</p>
+    <p>Every site published through Lyra Builder, in one place. Type
+       <code style="color:var(--cyan)">#taqi.mt</code> to jump straight in.</p>
     <div class="by">created by <b>Muhammad Taqi</b></div>
 
     <div class="searchbar">
       <span class="ico">🔎</span>
-      <input id="q" type="text" placeholder="Search sites, or type #taqi.mt …">
+      <input id="q" type="text" placeholder="Search sites, or type #taqi.mt …" autocomplete="off">
       <span class="hint">#domain</span>
     </div>
   </section>
@@ -142,6 +151,7 @@ padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inh
   </div>
 
   <div class="stats" id="stats"></div>
+  <div class="err" id="err"></div>
 
   <div id="grid" class="grid"></div>
 
@@ -161,46 +171,71 @@ padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inh
       <button class="vbtn close" id="vclose">close ✕</button>
     </div>
   </div>
-  <iframe id="viframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <iframe id="viframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
 </div>
 
 <script>
 const ICONS = {ai:'🧠', web:'🌐', game:'🎮', other:'✨'};
-const registry = {};      // "taqi.mt" -> {name,tld,path,category}
+const registry = {};      // "taqi.mt" -> {name,tld,path,category,price}
 let filterCat = 'all';
 let query = '';
 
 const gridEl  = document.getElementById('grid');
 const statsEl = document.getElementById('stats');
 const footEl  = document.getElementById('foot');
+const errEl   = document.getElementById('err');
+const viewer  = document.getElementById('viewer');
+const vaddr   = document.getElementById('vaddr');
+const viframe = document.getElementById('viframe');
+let current = null;
+
+function showErr(msg){
+  errEl.textContent = msg;
+  errEl.classList.add('show');
+  setTimeout(()=>errEl.classList.remove('show'), 4000);
+}
 
 async function loadRegistry(){
+  footEl.textContent = 'loading registry…';
   try{
-    const man = await fetch('domains/manifest.json', {cache:'no-cache'}).then(r=>r.json());
-    for (const tld of man.tlds){
-      try{
-        const txt = await fetch(`domains/${tld}.html`, {cache:'no-cache'}).then(r=>r.text());
-        const doc = new DOMParser().parseFromString(txt, 'text/html');
-        const pre = doc.querySelector('.lyra-target');
-        if (!pre) continue;
-        for (const raw of pre.textContent.split('\n')){
-          const line = raw.trim();
-          if (!line || !line.includes('=')) continue;
-          const [n, p] = line.split('=').map(s=>s.trim());
-          if (!n || !p) continue;
-          const key = `${n.toLowerCase()}.${tld}`;
-          registry[key] = {
-            name: n, tld,
-            path: p,
-            category: (p.split('/')[0] || 'other').toLowerCase()
-          };
-        }
-      }catch(e){ /* skip broken domain file */ }
+    const res = await fetch('domains/registry.html?_=' + Date.now(), {cache:'no-cache'});
+    if (!res.ok) throw new Error(`HTTP ${res.status} for domains/registry.html`);
+    const txt = await res.text();
+    const doc = new DOMParser().parseFromString(txt, 'text/html');
+    const blocks = doc.querySelectorAll('pre.lyra-target[data-tld]');
+    if (!blocks.length){
+      footEl.textContent = '⚠️ registry.html has no <pre data-tld> blocks';
+      return;
     }
+
+    let total = 0;
+    blocks.forEach(pre=>{
+      const tld   = (pre.dataset.tld || '').trim().toLowerCase();
+      const price = parseInt(pre.dataset.price || '0', 10) || 0;
+      if (!tld) return;
+      for (const raw of pre.textContent.split('\n')){
+        const line = raw.trim();
+        if (!line || !line.includes('=')) continue;
+        const eq = line.indexOf('=');
+        const n  = line.slice(0, eq).trim();
+        const p  = line.slice(eq + 1).trim();
+        if (!n || !p) continue;
+        const key = `${n.toLowerCase()}.${tld}`;
+        registry[key] = {
+          name: n, tld, path: p, price,
+          category: (p.split('/')[0] || 'other').toLowerCase()
+        };
+        total++;
+      }
+    });
+    footEl.textContent = `${total} live site${total===1?'':'s'} · registry loaded`;
   }catch(e){
-    footEl.textContent = '⚠️ Could not load domains/manifest.json';
+    console.error(e);
+    footEl.textContent = '⚠️ could not load domains/registry.html';
+    showErr('Registry load failed — ' + e.message);
   }
   render();
+  handleHash();
 }
 
 function render(){
@@ -212,7 +247,6 @@ function render(){
     `<div><b>${counts.all}</b> sites</div>` +
     `<div><b>${new Set(all.map(s=>s.tld)).size}</b> domains</div>` +
     `<div><b>${counts.ai}</b> AI · <b>${counts.web}</b> web · <b>${counts.game}</b> game · <b>${counts.other}</b> other</div>`;
-  footEl.textContent = `${counts.all} live sites · registry loaded`;
 
   const q = query.toLowerCase();
   const list = all
@@ -222,18 +256,18 @@ function render(){
 
   if (!list.length){
     gridEl.innerHTML = `<div class="empty" style="grid-column:1/-1">
-      No sites yet${q?` for “${q}”`:''}.<br>
+      No sites yet${q ? ` for "${q}"` : ''}.<br>
       <b>Publish the first one from Lyra Builder →</b>
     </div>`;
     return;
   }
 
   gridEl.innerHTML = list.map(s=>`
-    <div class="site" data-key="${s.key}">
+    <div class="site" data-key="${s.key}" role="button" tabindex="0">
       <div class="top">
-        <div class="ico">${ICONS[s.category]||'✨'}</div>
+        <div class="ico">${ICONS[s.category] || '✨'}</div>
         <div>
-          <div class="cat">${s.category}</div>
+          <div class="cat">${s.category}${s.price === 0 ? ' · free' : ''}</div>
           <div class="name">${s.key}</div>
         </div>
       </div>
@@ -243,65 +277,51 @@ function render(){
 
   gridEl.querySelectorAll('.site').forEach(el=>{
     el.onclick = ()=> openViewer(el.dataset.key);
+    el.onkeydown = (e)=>{ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(el.dataset.key); } };
   });
 }
 
-/* open viewer */
-const viewer  = document.getElementById('viewer');
-const vaddr   = document.getElementById('vaddr');
-const viframe = document.getElementById('viframe');
-let current = null;
-
 function openViewer(key){
-  key = key.replace(/^#/,'').toLowerCase();
+  key = String(key).replace(/^#/,'').toLowerCase();
   const entry = registry[key];
-  if (!entry) return;
+  if (!entry){
+    showErr(`"${key}" is not in the registry yet.`);
+    return;
+  }
   current = {key, ...entry};
-  vaddr.innerHTML = `<span class="lock">🔒</span>${current.key}`;
+  vaddr.innerHTML = `<span class="lock">🔒</span>${current.key} <span style="color:#8b8ba7;margin-left:8px">→ ${current.path}</span>`;
   viframe.src = current.path;
   viewer.classList.add('show');
   if (location.hash !== '#'+key) history.replaceState(null,'','#'+key);
 }
 
-document.getElementById('vclose').onclick = ()=>{
-  viewer.classList.remove('show');
-  viframe.src = 'about:blank';
-  current = null;
-  history.replaceState(null,'',location.pathname);
-};
-
-document.getElementById('vclose').onclick = ()=>{
+function closeViewer(){
   viewer.classList.remove('show');
   viframe.src = 'about:blank';
   current = null;
   if (location.hash) history.replaceState(null,'',location.pathname);
-};
+}
 
-document.getElementById('vclose').onclick = ()=>{
-  viewer.classList.remove('show');
-  viframe.src = 'about:blank';
-  current = null;
-  history.replaceState(null,'',location.pathname);
-};
-
-document.getElementById('vclose').onclick = ()=>{
-  viewer.classList.remove('show');
-  viframe.src = 'about:blank';
-  current = null;
-  history.replaceState(null,'',location.pathname);
-};
+document.getElementById('vclose').onclick = closeViewer;
 
 document.getElementById('vcopy').onclick = ()=>{
   if (!current) return;
-  navigator.clipboard.writeText(location.href);
-  const b = document.getElementById('vcopy');
-  b.textContent = 'copied'; setTimeout(()=>b.textContent='copy link', 1200);
-};
-document.getElementById('vext').onclick = ()=>{
-  if (current) window.open(current.path, '_blank');
+  navigator.clipboard.writeText(location.href).then(()=>{
+    const b = document.getElementById('vcopy');
+    const t = b.textContent; b.textContent = 'copied';
+    setTimeout(()=>b.textContent=t, 1200);
+  });
 };
 
-/* filter */
+document.getElementById('vext').onclick = ()=>{
+  if (current) window.open(current.path, '_blank', 'noopener');
+};
+
+document.addEventListener('keydown', e=>{
+  if (e.key === 'Escape' && viewer.classList.contains('show')) closeViewer();
+});
+
+/* filter pills */
 document.getElementById('pills').addEventListener('click', e=>{
   const p = e.target.closest('.pill');
   if (!p) return;
@@ -312,24 +332,37 @@ document.getElementById('pills').addEventListener('click', e=>{
 });
 
 /* search */
-document.getElementById('q').addEventListener('input', e=>{
+const qEl = document.getElementById('q');
+qEl.addEventListener('input', e=>{
   const v = e.target.value.trim();
   if (v.startsWith('#')){
     const key = v.slice(1).toLowerCase();
-    if (registry[key]) { openViewer(key); e.target.value = ''; query = ''; render(); return; }
+    if (registry[key]){
+      openViewer(key);
+      e.target.value = '';
+      query = '';
+      render();
+      return;
+    }
   }
   query = v;
   render();
 });
+qEl.addEventListener('keydown', e=>{
+  if (e.key === 'Enter'){
+    const v = e.target.value.trim().replace(/^#/,'').toLowerCase();
+    if (registry[v]){ openViewer(v); e.target.value=''; query=''; render(); }
+  }
+});
 
-/* hash on load */
+/* hash on load and on change */
 function handleHash(){
   const h = location.hash.replace(/^#/,'').toLowerCase();
   if (h && registry[h]) openViewer(h);
 }
-
-loadRegistry().then(handleHash);
 window.addEventListener('hashchange', handleHash);
+
+loadRegistry();
 </script>
 </body>
 </html>
