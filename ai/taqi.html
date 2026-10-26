@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.TAQI STUDIO - Game Development Studio</title>
+    <!-- Favicon / Web Icon -->
+    <link rel="icon" href="https://yt3.ggpht.com/6NkGrylqLe2FAxYaq-VQ1vBP_z0FwDAK9RMJ0Bql13mJur1H8yfBxvF3TXs0Jr0GLv4p839qC_wN=s258-c-fcrop64=1,00000000ffffffff-rw-nd-v1" type="image/x-icon">
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --dark-bg: #0d0f18;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+            --text-muted: #a0a5b5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            background: radial-gradient(circle at top right, #1a1e36, #0d0f18);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header / Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(13, 15, 24, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+        }
+
+        .brand h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .yt-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ff0000;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .yt-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Primary Action Button */
+        .main-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: #000;
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: 0.3s ease;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .main-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.7);
+        }
+
+        /* Games Section */
+        .games-section {
+            padding: 40px 8%;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .game-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4757;
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .game-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .game-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .game-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(13, 15, 24, 0.9);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 50px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 5%;
+            }
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .brand h1 {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="brand">
+            <img src="https://yt3.ggpht.com/6NkGrylqLe2FAxYaq-VQ1vBP_z0FwDAK9RMJ0Bql13mJur1H8yfBxvF3TXs0Jr0GLv4p839qC_wN=s258-c-fcrop64=1,00000000ffffffff-rw-nd-v1" alt="M.TAQI STUDIO Logo">
+            <h1>M.TAQI STUDIO</h1>
+        </div>
+        <a href="https://www.youtube.com/@M.TAQI-STUDIO" target="_blank" class="yt-btn">
+            <i class="fab fa-youtube"></i> YouTube
+        </a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <span class="hero-badge"><i class="fas fa-gamepad"></i> Official Game Studio</span>
+        <h2>Next-Level Stickman Games & Entertainment</h2>
+        <p>Is web ki team stickman games banati hai! Latest games aur naye projects download karne ke liye neeche button par click karein.</p>
+        
+        <a href="https://sites.google.com/view/nexura-app-store/m-taqi-studio" target="_blank" class="main-btn">
+            <i class="fas fa-external-link-alt"></i> M.TAQI STUDIO
+        </a>
+    </section>
+
+    <!-- Games Showcase -->
+    <section class="games-section">
+        <h2 class="section-title"><i class="fas fa-fire"></i> Our Games</h2>
+        <div class="games-grid">
+            
+            <!-- Game Card 1: Latest Release -->
+            <div class="game-card">
+                <span class="game-tag">LATEST</span>
+                <div class="game-icon">
+                    <i class="fas fa-ghost"></i>
+                </div>
+                <h3>Stickman Horror Night</h3>
+                <p>Ek thrilling aur scary stickman survival game. Night mode ke sath horror challenges ka samna karein!</p>
+                <a href="https://github.com/muhammadtaqi512q-oss/JAVIS-AI-2/releases/download/v1.0.0/Stickman.Horror.Night.apk" target="_blank" class="download-btn">
+                    <i class="fas fa-download"></i> Download Game
+                </a>
+            </div>
+
+            <!-- Game Card 2: Store Access -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-cubes"></i>
+                </div>
+                <h3>More Stickman Games</h3>
+                <p>Aur koi si bhi games download karne ke liye M.TAQI STUDIO store visit karein aur latest releases check karein.</p>
+                <a href="https://sites.google.com/view/nexura-app-store/m-taqi-studio" target="_blank" class="download-btn">
+                    <i class="fas fa-store"></i> Visit Store
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>CREATED BY MUHAMMAD TAQI</p>
+        <p style="margin-top: 5px; font-size: 0.8rem;">&copy; 2026 M.TAQI STUDIO. All rights reserved.</p>
+    </footer>
+
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"e3c1c9af36de41759418005494a48906","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
