@@ -1,0 +1,9 @@
+{
+  "tlds": [
+    "com", "net", "org", "mt", "zf", "stu",
+    "lyra.com", "lyra.net", "lyra.org", "lyra.mt", "lyra.zf", "lyra.stu",
+    "taqi.lyra", "taqi.tk", "taqi.tl", "lyra.tk",
+    "app", "site", "lyra.app", "lyra.site",
+    "oneapp.dev", "duckdns.org", "ai.studio"
+  ]
+}
