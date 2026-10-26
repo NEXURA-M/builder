@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lyra Browser · by Muhammad Taqi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070c;--ink:#e9e9f2;--muted:#8b8ba7;--line:rgba(255,255,255,.08);
+--card:rgba(255,255,255,.03);--violet:#a78bfa;--cyan:#22d3ee;--pink:#f472b6}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;
+min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:.5;
+animation:float 20s ease-in-out infinite}
+.b1{width:560px;height:560px;background:#6d28d9;top:-180px;left:-160px}
+.b2{width:520px;height:520px;background:#0891b2;bottom:-160px;right:-140px;animation-delay:-8s}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:0 22px 80px}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;
+font-weight:700;letter-spacing:-.02em}
+.logo .dot{width:26px;height:26px;border-radius:9px;
+background:conic-gradient(from 180deg,var(--violet),var(--cyan),var(--pink),var(--violet));
+box-shadow:0 0 22px rgba(167,139,250,.55)}
+.nav{font-size:13px;color:var(--muted)}
+.nav a{color:inherit;text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.hero{padding:52px 0 18px;text-align:center}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted);
+background:var(--card)}
+.chip .pulse{width:8px;height:8px;border-radius:50%;background:#34d399;
+box-shadow:0 0 12px #34d399;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.4}}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,6vw,68px);
+line-height:1.03;letter-spacing:-.035em;margin:16px 0 10px}
+h1 .g{background:linear-gradient(120deg,var(--violet),var(--cyan) 50%,var(--pink));
+-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:560px;margin:0 auto;font-size:15px;line-height:1.6}
+.hero .by{margin-top:12px;font-size:13px;color:var(--muted)}
+.hero .by b{color:var(--ink);font-weight:600}
+.searchbar{max-width:720px;margin:26px auto 0;position:relative}
+.searchbar input{width:100%;padding:16px 54px 16px 52px;border-radius:16px;
+border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);
+font:inherit;font-size:15px;outline:none;transition:.2s;backdrop-filter:blur(8px)}
+.searchbar input:focus{border-color:rgba(167,139,250,.6);
+box-shadow:0 0 0 4px rgba(167,139,250,.12)}
+.searchbar .ico{position:absolute;left:18px;top:50%;transform:translateY(-50%);
+color:var(--muted);font-size:18px}
+.searchbar .hint{position:absolute;right:16px;top:50%;transform:translateY(-50%);
+color:var(--muted);font-size:12px;border:1px solid var(--line);
+padding:3px 8px;border-radius:6px}
+.pills{display:flex;gap:8px;justify-content:center;margin:22px 0 6px;flex-wrap:wrap}
+.pill{padding:8px 16px;border-radius:999px;border:1px solid var(--line);
+background:var(--card);color:var(--muted);font-size:13px;cursor:pointer;transition:.2s}
+.pill:hover{color:var(--ink);border-color:rgba(167,139,250,.4)}
+.pill.on{background:linear-gradient(120deg,rgba(167,139,250,.2),rgba(34,211,238,.12));
+border-color:rgba(167,139,250,.7);color:var(--ink)}
+.stats{display:flex;gap:18px;justify-content:center;margin:26px 0 0;
+flex-wrap:wrap;color:var(--muted);font-size:13px}
+.stats b{color:var(--ink);font-family:'Space Grotesk',sans-serif}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:14px;margin-top:34px}
+.site{border:1px solid var(--line);border-radius:18px;background:var(--card);
+padding:18px;cursor:pointer;transition:.22s;position:relative;overflow:hidden}
+.site:hover{transform:translateY(-3px);border-color:rgba(167,139,250,.5);
+background:rgba(167,139,250,.06);box-shadow:0 18px 40px -20px rgba(167,139,250,.4)}
+.site .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.site .ico{width:38px;height:38px;border-radius:12px;display:grid;
+place-items:center;font-size:19px;
+background:linear-gradient(135deg,rgba(167,139,250,.25),rgba(34,211,238,.15));
+border:1px solid var(--line)}
+.site .cat{font-size:11px;color:var(--muted);text-transform:uppercase;
+letter-spacing:.1em}
+.site .name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;
+margin-top:2px;word-break:break-all}
+.site .path{font-family:ui-monospace,monospace;font-size:11px;color:var(--muted);
+margin-top:10px;padding-top:10px;border-top:1px solid var(--line);
+word-break:break-all}
+.empty{text-align:center;color:var(--muted);padding:60px 20px;
+border:1px dashed var(--line);border-radius:18px;margin-top:34px}
+.empty b{color:var(--ink)}
+footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);
+color:var(--muted);font-size:13px;display:flex;justify-content:space-between;
+flex-wrap:wrap;gap:8px}
+/* viewer */
+.viewer{position:fixed;inset:0;z-index:60;background:rgba(5,5,10,.92);
+backdrop-filter:blur(10px);display:none;flex-direction:column}
+.viewer.show{display:flex}
+.vbar{display:flex;align-items:center;gap:10px;padding:14px 18px;
+border-bottom:1px solid var(--line);background:#0b0b14}
+.vdots{display:flex;gap:6px}
+.vdots i{width:11px;height:11px;border-radius:50%;display:block}
+.vdots i:nth-child(1){background:#f87171}
+.vdots i:nth-child(2){background:#fbbf24}
+.vdots i:nth-child(3){background:#34d399}
+.vaddr{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);
+border-radius:10px;padding:8px 14px;font-family:ui-monospace,monospace;
+font-size:13px;color:var(--ink);overflow:hidden;white-space:nowrap;
+text-overflow:ellipsis}
+.vaddr .lock{color:#34d399;margin-right:6px}
+.vbtns{display:flex;gap:6px}
+.vbtn{background:transparent;border:1px solid var(--line);color:var(--muted);
+padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-family:inherit}
+.vbtn:hover{color:var(--ink);border-color:var(--violet)}
+.vbtn.close{color:var(--pink);border-color:rgba(244,114,182,.3)}
+.viewer iframe{flex:1;border:0;background:#fff;width:100%}
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<div class="wrap">
+  <header>
+    <div class="logo"><span class="dot"></span>Lyra Browser</div>
+    <div class="nav">served from GitHub Pages · <span style="color:var(--ink)">built by Muhammad Taqi</span></div>
+  </header>
+
+  <section class="hero">
+    <div class="chip"><span class="pulse"></span> Live registry</div>
+    <h1>Browse the <span class="g">Lyra web</span>.</h1>
+    <p>Every site published through Lyra Builder, in one place. Type <code style="color:var(--cyan)">#taqi.mt</code> to jump straight in.</p>
+    <div class="by">created by <b>Muhammad Taqi</b></div>
+
+    <div class="searchbar">
+      <span class="ico">🔎</span>
+      <input id="q" type="text" placeholder="Search sites, or type #taqi.mt …">
+      <span class="hint">#domain</span>
+    </div>
+  </section>
+
+  <div class="pills" id="pills">
+    <div class="pill on" data-cat="all">All</div>
+    <div class="pill" data-cat="ai">🧠 AI</div>
+    <div class="pill" data-cat="web">🌐 Web</div>
+    <div class="pill" data-cat="game">🎮 Game</div>
+    <div class="pill" data-cat="other">✨ Others</div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div id="grid" class="grid"></div>
+
+  <footer>
+    <div>Lyra Browser · created by Muhammad Taqi</div>
+    <div id="foot">loading registry…</div>
+  </footer>
+</div>
+
+<div class="viewer" id="viewer">
+  <div class="vbar">
+    <div class="vdots"><i></i><i></i><i></i></div>
+    <div class="vaddr" id="vaddr"><span class="lock">🔒</span>taqi.mt</div>
+    <div class="vbtns">
+      <button class="vbtn" id="vcopy">copy link</button>
+      <button class="vbtn" id="vext">open raw</button>
+      <button class="vbtn close" id="vclose">close ✕</button>
+    </div>
+  </div>
+  <iframe id="viframe" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+</div>
+
+<script>
+const ICONS = {ai:'🧠', web:'🌐', game:'🎮', other:'✨'};
+const registry = {};      // "taqi.mt" -> {name,tld,path,category}
+let filterCat = 'all';
+let query = '';
+
+const gridEl  = document.getElementById('grid');
+const statsEl = document.getElementById('stats');
+const footEl  = document.getElementById('foot');
+
+async function loadRegistry(){
+  try{
+    const man = await fetch('domains/manifest.json', {cache:'no-cache'}).then(r=>r.json());
+    for (const tld of man.tlds){
+      try{
+        const txt = await fetch(`domains/${tld}.html`, {cache:'no-cache'}).then(r=>r.text());
+        const doc = new DOMParser().parseFromString(txt, 'text/html');
+        const pre = doc.querySelector('.lyra-target');
+        if (!pre) continue;
+        for (const raw of pre.textContent.split('\n')){
+          const line = raw.trim();
+          if (!line || !line.includes('=')) continue;
+          const [n, p] = line.split('=').map(s=>s.trim());
+          if (!n || !p) continue;
+          const key = `${n.toLowerCase()}.${tld}`;
+          registry[key] = {
+            name: n, tld,
+            path: p,
+            category: (p.split('/')[0] || 'other').toLowerCase()
+          };
+        }
+      }catch(e){ /* skip broken domain file */ }
+    }
+  }catch(e){
+    footEl.textContent = '⚠️ Could not load domains/manifest.json';
+  }
+  render();
+}
+
+function render(){
+  const all = Object.entries(registry).map(([k,v])=>({key:k, ...v}));
+  const counts = {all: all.length, ai:0, web:0, game:0, other:0};
+  all.forEach(s => counts[s.category] = (counts[s.category]||0) + 1);
+
+  statsEl.innerHTML =
+    `<div><b>${counts.all}</b> sites</div>` +
+    `<div><b>${new Set(all.map(s=>s.tld)).size}</b> domains</div>` +
+    `<div><b>${counts.ai}</b> AI · <b>${counts.web}</b> web · <b>${counts.game}</b> game · <b>${counts.other}</b> other</div>`;
+  footEl.textContent = `${counts.all} live sites · registry loaded`;
+
+  const q = query.toLowerCase();
+  const list = all
+    .filter(s => filterCat==='all' || s.category===filterCat)
+    .filter(s => !q || s.key.includes(q) || s.name.toLowerCase().includes(q))
+    .sort((a,b) => a.key.localeCompare(b.key));
+
+  if (!list.length){
+    gridEl.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      No sites yet${q?` for “${q}”`:''}.<br>
+      <b>Publish the first one from Lyra Builder →</b>
+    </div>`;
+    return;
+  }
+
+  gridEl.innerHTML = list.map(s=>`
+    <div class="site" data-key="${s.key}">
+      <div class="top">
+        <div class="ico">${ICONS[s.category]||'✨'}</div>
+        <div>
+          <div class="cat">${s.category}</div>
+          <div class="name">${s.key}</div>
+        </div>
+      </div>
+      <div class="path">${s.path}</div>
+    </div>
+  `).join('');
+
+  gridEl.querySelectorAll('.site').forEach(el=>{
+    el.onclick = ()=> openViewer(el.dataset.key);
+  });
+}
+
+/* open viewer */
+const viewer  = document.getElementById('viewer');
+const vaddr   = document.getElementById('vaddr');
+const viframe = document.getElementById('viframe');
+let current = null;
+
+function openViewer(key){
+  key = key.replace(/^#/,'').toLowerCase();
+  const entry = registry[key];
+  if (!entry) return;
+  current = {key, ...entry};
+  vaddr.innerHTML = `<span class="lock">🔒</span>${current.key}`;
+  viframe.src = current.path;
+  viewer.classList.add('show');
+  if (location.hash !== '#'+key) history.replaceState(null,'','#'+key);
+}
+
+document.getElementById('vclose').onclick = ()=>{
+  viewer.classList.remove('show');
+  viframe.src = 'about:blank';
+  current = null;
+  history.replaceState(null,'',location.pathname);
+};
+
+document.getElementById('vclose').onclick = ()=>{
+  viewer.classList.remove('show');
+  viframe.src = 'about:blank';
+  current = null;
+  if (location.hash) history.replaceState(null,'',location.pathname);
+};
+
+document.getElementById('vclose').onclick = ()=>{
+  viewer.classList.remove('show');
+  viframe.src = 'about:blank';
+  current = null;
+  history.replaceState(null,'',location.pathname);
+};
+
+document.getElementById('vclose').onclick = ()=>{
+  viewer.classList.remove('show');
+  viframe.src = 'about:blank';
+  current = null;
+  history.replaceState(null,'',location.pathname);
+};
+
+document.getElementById('vcopy').onclick = ()=>{
+  if (!current) return;
+  navigator.clipboard.writeText(location.href);
+  const b = document.getElementById('vcopy');
+  b.textContent = 'copied'; setTimeout(()=>b.textContent='copy link', 1200);
+};
+document.getElementById('vext').onclick = ()=>{
+  if (current) window.open(current.path, '_blank');
+};
+
+/* filter */
+document.getElementById('pills').addEventListener('click', e=>{
+  const p = e.target.closest('.pill');
+  if (!p) return;
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  p.classList.add('on');
+  filterCat = p.dataset.cat;
+  render();
+});
+
+/* search */
+document.getElementById('q').addEventListener('input', e=>{
+  const v = e.target.value.trim();
+  if (v.startsWith('#')){
+    const key = v.slice(1).toLowerCase();
+    if (registry[key]) { openViewer(key); e.target.value = ''; query = ''; render(); return; }
+  }
+  query = v;
+  render();
+});
+
+/* hash on load */
+function handleHash(){
+  const h = location.hash.replace(/^#/,'').toLowerCase();
+  if (h && registry[h]) openViewer(h);
+}
+
+loadRegistry().then(handleHash);
+window.addEventListener('hashchange', handleHash);
+</script>
+</body>
+</html>
