@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhammad Taqi | Web Builder JS Library</title>
+
+    <link rel="icon" href="https://yt3.ggpht.com/CRdTHCDMWDNbc75cMKKKoII4H_7L6kPB2gRcErgF1IBc7-7uat6PU7BhqaagjgPNUMODFGxudm2A_6s=s953-c-fcrop64=1,13160000ece9ffff-rw-nd-v1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #8b5cf6;
+            --bg: #0b0f19;
+            --card-bg: rgba(23, 32, 54, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --code-bg: #030712;
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.15), transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.15), transparent 45%);
+            background-attachment: fixed;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            background: rgba(11, 15, 25, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            object-fit: cover;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .brand-text span {
+            display: block;
+            margin-top: -2px;
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .hero {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 20px 60px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-bottom: 24px;
+            padding: 6px 16px;
+            border: 1px solid rgba(79, 70, 229, 0.4);
+            border-radius: 30px;
+            background: rgba(79, 70, 229, 0.15);
+            color: #818cf8;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .hero h2 {
+            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero h2 span {
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            margin-bottom: 36px;
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        .creator-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .creator-tag strong {
+            color: var(--accent);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .try-btn,
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            border: 0;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .try-btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        .download-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .try-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 40px rgba(79, 70, 229, 0.55);
+        }
+
+        .try-btn:active,
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .try-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .try-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .try-btn-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .card {
+            margin-bottom: 32px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            color: #f1f5f9;
+            font-size: 1.4rem;
+        }
+
+        .description {
+            color: var(--text-muted);
+        }
+
+        .code-box {
+            position: relative;
+            margin-top: 16px;
+            padding: 20px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            background: var(--code-bg);
+        }
+
+        .code-box pre {
+            color: #38bdf8;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .link-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 16px 20px;
+            overflow-wrap: anywhere;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            background: var(--code-bg);
+            color: #a7f3d0;
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .copy-btn {
+            flex-shrink: 0;
+            padding: 8px 16px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .copy-status {
+            display: block;
+            min-height: 22px;
+            margin-top: 10px;
+            color: #86efac;
+            font-size: 0.85rem;
+        }
+
+        /* ============ SETUP MODAL STYLES ============ */
+        .setup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .setup-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .setup-modal {
+            background: linear-gradient(160deg, #0f172a, #1e1b4b);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 28px;
+            padding: 40px 36px;
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(79, 70, 229, 0.15);
+        }
+
+        .setup-modal .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 0;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .setup-modal .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .setup-modal h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, #c4b5fd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .setup-modal .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            font-size: 1rem;
+        }
+
+        .setup-modal label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #c4b5fd;
+            letter-spacing: 0.3px;
+        }
+
+        .setup-modal input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .setup-modal input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.25);
+        }
+
+        .setup-modal input[type="text"]::placeholder {
+            color: #4b5563;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .builder-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 24px 0 28px;
+        }
+
+        .builder-option {
+            padding: 20px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            user-select: none;
+        }
+
+        .builder-option:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .builder-option.selected {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.15);
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.25);
+        }
+
+        .builder-option .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .builder-option .label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            display: block;
+        }
+
+        .builder-option .desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .builder-option.selected .label {
+            color: #818cf8;
+        }
+
+        .launch-btn {
+            width: 100%;
+            padding: 18px;
+            border: 0;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 40px rgba(79, 70, 229, 0.55);
+        }
+
+        .launch-btn:active {
+            transform: translateY(0);
+        }
+
+        .launch-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .secondary-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ============ BUILDER VIEW STYLES ============ */
+        .builder-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0b0f19;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .builder-view.active {
+            display: flex;
+        }
+
+        .builder-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            background: rgba(11, 15, 25, 0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        .builder-view-header .bv-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #e2e8f0;
+        }
+
+        .builder-view-header .bv-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+            animation: pulse 1.5s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .close-builder-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-builder-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .builder-view-body {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+        }
+
+        .builder-view-body #liveBuilderContainer {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+        }
+
+        .builder-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .builder-loading .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2.1rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .link-box {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .setup-modal {
+                padding: 28px 20px;
+                border-radius: 20px;
+            }
+
+            .setup-modal h2 {
+                font-size: 1.5rem;
+            }
+
+            .builder-options {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .try-btn,
+            .download-btn {
+                padding: 14px 28px;
+                font-size: 1rem;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ MAIN LANDING PAGE ============ -->
+    <nav>
+        <div class="brand">
+            <img src="https://yt3.ggpht.com/CRdTHCDMWDNbc75cMKKKoII4H_7L6kPB2gRcErgF1IBc7-7uat6PU7BhqaagjgPNUMODFGxudm2A_6s=s953-c-fcrop64=1,13160000ece9ffff-rw-nd-v1" alt="Muhammad Taqi Logo">
+            <div class="brand-text">
+                <h1>MUHAMMAD TAQI</h1>
+                <span>CREATED BY MUHAMMAD TAQI</span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <span class="badge">🚀 Free Web Builder JS Library</span>
+        <h2>Build & Embed Modern Web Builders Effortlessly <span>In Seconds</span></h2>
+        <p>
+            Muhammad Taqi has created a lightweight, powerful, and completely free Web Builder
+            JavaScript library. Embed a full-featured website builder directly into your HTML
+            projects with simple configurations.
+        </p>
+
+        <div class="creator-tag">
+            <span>Development & Architecture by <strong>Muhammad Taqi</strong></span>
+        </div>
+
+        <!-- BUTTON GROUP: PREVIEW + DOWNLOAD -->
+        <div class="btn-group">
+            <button class="try-btn" type="button" onclick="openSetupModal('preview')">
+                🚀 Try Live Preview
+            </button>
+            <button class="download-btn" type="button" onclick="openSetupModal('download')">
+                ⬇️ Download Builder
+            </button>
+        </div>
+        <div class="try-btn-sub">Enter your name & choose builder type – preview or download</div>
+    </section>
+
+    <main class="container">
+        <section class="card">
+            <h3>🔗 Web Builder JavaScript CDN URL</h3>
+            <p class="description">
+                Include this script directly in your web project:
+            </p>
+
+            <div class="link-box">
+                <span id="webCdnUrl">https://muhammadtaqi.oneapp.dev/web-builder.js</span>
+                <button class="copy-btn" type="button" onclick="copyText('webCdnUrl', this)">
+                    Copy Link
+                </button>
+            </div>
+            <span class="copy-status" aria-live="polite"></span>
+        </section>
+
+        <section class="card">
+            <h3>⚡ Web Builder Integration Example</h3>
+            <p class="description">
+                Copy and paste this boilerplate into your HTML project:
+            </p>
+
+            <div class="code-box">
+                <button class="copy-btn" type="button" onclick="copyText('webCodeSnippet', this)">
+                    Copy Code
+                </button>
+
+                <pre id="webCodeSnippet"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Web Builder Integration&lt;/title&gt;
+&lt;/head&gt;
+&lt;body style="margin: 0; padding: 0;"&gt;
+
+    &lt;div id="builder-container"&gt;&lt;/div&gt;
+
+    &lt;script src="https://muhammadtaqi.oneapp.dev/web-builder.js"&gt;&lt;/script&gt;
+
+    &lt;script&gt;
+        new MuhammadTaqiBuilder({
+            containerId: "builder-container",
+            builderName: "NEXURA TAQI"
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+            <span class="copy-status" aria-live="polite"></span>
+        </section>
+
+        <section class="card">
+            <h3>🔗 AI Builder JavaScript CDN URL</h3>
+            <p class="description">
+                Include this AI builder script directly in your web project:
+            </p>
+
+            <div class="link-box">
+                <span id="aiCdnUrl">https://muhammadtaqi.oneapp.dev/ai-builder.js</span>
+                <button class="copy-btn" type="button" onclick="copyText('aiCdnUrl', this)">
+                    Copy Link
+                </button>
+            </div>
+            <span class="copy-status" aria-live="polite"></span>
+        </section>
+
+        <section class="card">
+            <h3>⚡ JACK AI Builder Integration Example</h3>
+            <p class="description">
+                Copy and paste this boilerplate into your HTML project:
+            </p>
+
+            <div class="code-box">
+                <button class="copy-btn" type="button" onclick="copyText('aiCodeSnippet', this)">
+                    Copy Code
+                </button>
+
+                <pre id="aiCodeSnippet"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;JACK AI Builder&lt;/title&gt;
+&lt;/head&gt;
+&lt;body style="margin: 0; padding: 0;"&gt;
+
+    &lt;div id="jack-container"&gt;&lt;/div&gt;
+
+    &lt;script src="https://muhammadtaqi.oneapp.dev/ai-builder.js"&gt;&lt;/script&gt;
+
+    &lt;script&gt;
+        new JackAiBuilder({
+            containerId: "jack-container",
+            aiName: "JACK AI",
+            footerLink: "https://nexura.oneapp.dev/"
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+            <span class="copy-status" aria-live="polite"></span>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 MUHAMMAD TAQI. Created & Designed by <strong>Muhammad Taqi</strong>. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ============ SETUP MODAL (Full-Screen Overlay) ============ -->
+    <div class="setup-overlay" id="setupOverlay">
+        <div class="setup-modal">
+            <button class="close-btn" type="button" onclick="closeSetupModal()" aria-label="Close">✕</button>
+
+            <h2>🚀 Create Your Builder</h2>
+            <p class="subtitle">Enter your name and choose your builder type</p>
+
+            <label for="userNameInput">YOUR NAME</label>
+            <input
+            type="text"
+            id="userNameInput"
+            placeholder="e.g. Ali Raza, Ayesha Khan..."
+            maxlength="40"
+            autocomplete="off"
+            onkeydown="if(event.key==='Enter') handleModalAction()"
+            />
+
+            <div class="builder-options">
+                <div class="builder-option selected" data-builder-type="web" onclick="selectBuilderType(this, 'web')">
+                    <span class="icon">🌐</span>
+                    <span class="label">Web Builder</span>
+                    <span class="desc">Full-featured site builder</span>
+                </div>
+                <div class="builder-option" data-builder-type="ai" onclick="selectBuilderType(this, 'ai')">
+                    <span class="icon">🤖</span>
+                    <span class="label">AI Builder</span>
+                    <span class="desc">JACK AI powered builder</span>
+                </div>
+            </div>
+
+            <button class="launch-btn" type="button" id="primaryActionBtn" onclick="handleModalAction()">
+                🔥 Launch Preview
+            </button>
+            <button class="secondary-btn" type="button" id="secondaryActionBtn" onclick="handleSecondaryAction()">
+                ⬇️ Download index.html
+            </button>
+        </div>
+    </div>
+
+    <!-- ============ BUILDER VIEW (Full-Screen Live Builder) ============ -->
+    <div class="builder-view" id="builderView">
+        <div class="builder-view-header">
+            <div class="bv-title">
+                <span class="dot"></span>
+                <span id="builderViewTitle">Live Builder</span>
+            </div>
+            <button class="close-builder-btn" type="button" onclick="closeBuilderView()">
+                ✕ Close Builder
+            </button>
+        </div>
+        <div class="builder-view-body">
+            <div id="liveBuilderContainer">
+                <div class="builder-loading" id="builderLoading">
+                    <div class="spinner"></div>
+                    <span>Loading your builder...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ GLOBAL STATE ============
+        let selectedBuilderType = 'web'; // 'web' | 'ai'
+        let modalMode = 'preview'; // 'preview' | 'download'
+        let builderScriptLoaded = {}; // Cache for dynamically loaded scripts
+
+        // ============ COPY FUNCTION ============
+        async function copyText(elementId, button) {
+            const element = document.getElementById(elementId);
+            const status = button.closest(".card").querySelector(".copy-status");
+            const textToCopy = element.innerText || element.textContent;
+
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textToCopy);
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textToCopy;
+                    textArea.style.position = "fixed";
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand("copy");
+                    textArea.remove();
+                }
+
+                const originalText = button.textContent;
+                button.textContent = "Copied!";
+                status.textContent = "Copied successfully.";
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    status.textContent = "";
+                }, 2000);
+            } catch (error) {
+                status.textContent = "Copy failed. Please copy manually.";
+            }
+        }
+
+        // ============ SETUP MODAL FUNCTIONS ============
+        function openSetupModal(mode) {
+            modalMode = mode || 'preview';
+            const overlay = document.getElementById('setupOverlay');
+            overlay.classList.add('active');
+            document.getElementById('userNameInput').value = '';
+            selectedBuilderType = 'web';
+            document.querySelectorAll('.builder-option').forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.builderType === 'web');
+            });
+
+            // Update button text based on mode
+            const primaryBtn = document.getElementById('primaryActionBtn');
+            const secondaryBtn = document.getElementById('secondaryActionBtn');
+
+            if (modalMode === 'preview') {
+                primaryBtn.textContent = '🔥 Launch Preview';
+                secondaryBtn.style.display = 'block';
+                secondaryBtn.textContent = '⬇️ Download index.html';
+            } else {
+                primaryBtn.textContent = '⬇️ Download index.html';
+                secondaryBtn.style.display = 'none'; // hide secondary in download mode
+            }
+
+            setTimeout(() => {
+                document.getElementById('userNameInput').focus();
+            }, 350);
+        }
+
+        function closeSetupModal() {
+            const overlay = document.getElementById('setupOverlay');
+            overlay.classList.remove('active');
+        }
+
+        function selectBuilderType(element, type) {
+            selectedBuilderType = type;
+            document.querySelectorAll('.builder-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // Handle primary button click (Launch in preview mode, Download in download mode)
+        function handleModalAction() {
+            if (modalMode === 'preview') {
+                launchBuilder();
+            } else {
+                downloadBuilderHtml();
+            }
+        }
+
+        // Handle secondary button click (Download when in preview mode)
+        function handleSecondaryAction() {
+            downloadBuilderHtml();
+        }
+
+        // Close overlay when clicking outside
+        document.getElementById('setupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSetupModal();
+            }
+        });
+
+        // ============ DOWNLOAD BUILDER HTML ============
+        function downloadBuilderHtml() {
+            const userName = document.getElementById('userNameInput').value.trim();
+            if (!userName) {
+                const input = document.getElementById('userNameInput');
+                input.style.borderColor = '#ef4444';
+                input.style.boxShadow = '0 0 0 4px rgba(239,68,68,0.25)';
+                input.placeholder = '⚠️ Please enter your name first!';
+                setTimeout(() => {
+                    input.style.borderColor = '';
+                    input.style.boxShadow = '';
+                    input.placeholder = 'e.g. Ali Raza, Ayesha Khan...';
+                    input.focus();
+                }, 1500);
+                return;
+            }
+
+            // Generate the HTML content based on builder type
+            let htmlContent = '';
+
+            if (selectedBuilderType === 'web') {
+                const builderName = userName.toUpperCase() + "'S BUILDER";
+                htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${userName}'s Web Builder</title>
+</head>
+<body style="margin: 0; padding: 0;">
+
+    <div id="builder-container"></div>
+
+    <script src="https://muhammadtaqi.oneapp.dev/web-builder.js"><\/script>
+
+    <script>
+        new MuhammadTaqiBuilder({
+            containerId: "builder-container",
+            builderName: "${builderName}"
+        });
+    <\/script>
+</body>
+</html>`;
+            } else {
+                const aiName = userName.toUpperCase() + " AI";
+                htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${userName}'s AI Builder</title>
+</head>
+<body style="margin: 0; padding: 0;">
+
+    <div id="jack-container"></div>
+
+    <script src="https://muhammadtaqi.oneapp.dev/ai-builder.js"><\/script>
+
+    <script>
+        new JackAiBuilder({
+            containerId: "jack-container",
+            aiName: "${aiName}",
+            footerLink: "https://nexura.oneapp.dev/"
+        });
+    <\/script>
+</body>
+</html>`;
+            }
+
+            // Create a Blob and trigger download
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'index.html';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 100);
+
+            // Close modal after download
+            closeSetupModal();
+        }
+
+        // ============ BUILDER LAUNCH (PREVIEW) ============
+        function launchBuilder() {
+            const userName = document.getElementById('userNameInput').value.trim();
+            if (!userName) {
+                const input = document.getElementById('userNameInput');
+                input.style.borderColor = '#ef4444';
+                input.style.boxShadow = '0 0 0 4px rgba(239,68,68,0.25)';
+                input.placeholder = '⚠️ Please enter your name first!';
+                setTimeout(() => {
+                    input.style.borderColor = '';
+                    input.style.boxShadow = '';
+                    input.placeholder = 'e.g. Ali Raza, Ayesha Khan...';
+                    input.focus();
+                }, 1500);
+                return;
+            }
+
+            closeSetupModal();
+            const builderView = document.getElementById('builderView');
+            builderView.classList.add('active');
+
+            const titleEl = document.getElementById('builderViewTitle');
+            if (selectedBuilderType === 'web') {
+                titleEl.textContent = `🌐 ${userName}'s Web Builder`;
+            } else {
+                titleEl.textContent = `🤖 ${userName}'s AI Builder`;
+            }
+
+            const container = document.getElementById('liveBuilderContainer');
+            container.innerHTML = `
+                <div class="builder-loading" id="builderLoading">
+                    <div class="spinner"></div>
+                    <span>Loading your ${selectedBuilderType === 'web' ? 'Web' : 'AI'} Builder...</span>
+                </div>
+            `;
+
+            const scriptUrl = selectedBuilderType === 'web' ?
+                'https://muhammadtaqi.oneapp.dev/web-builder.js' :
+                'https://muhammadtaqi.oneapp.dev/ai-builder.js';
+
+            const cleanContainerId = 'live-builder-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+
+            container.innerHTML = '';
+            const builderDiv = document.createElement('div');
+            builderDiv.id = cleanContainerId;
+            builderDiv.style.width = '100%';
+            builderDiv.style.height = '100%';
+            builderDiv.style.minHeight = 'calc(100vh - 60px)';
+            container.appendChild(builderDiv);
+
+            loadScript(scriptUrl).then(() => {
+                try {
+                    if (selectedBuilderType === 'web') {
+                        new MuhammadTaqiBuilder({
+                            containerId: cleanContainerId,
+                            builderName: userName.toUpperCase() + "'S BUILDER"
+                        });
+                    } else {
+                        new JackAiBuilder({
+                            containerId: cleanContainerId,
+                            aiName: userName.toUpperCase() + " AI",
+                            footerLink: "https://nexura.oneapp.dev/"
+                        });
+                    }
+                } catch (error) {
+                    console.error('Builder initialization error:', error);
+                    container.innerHTML = `
+                        <div class="builder-loading">
+                            <span style="color:#ef4444; font-size:1.2rem;">❌ Failed to initialize builder.</span>
+                            <span style="color:#94a3b8;">Please check console for details.</span>
+                            <button class="launch-btn" style="max-width:200px; margin-top:10px; padding:12px 24px;" onclick="closeBuilderView()">
+                                Go Back
+                            </button>
+                        </div>
+                    `;
+                }
+            }).catch((error) => {
+                console.error('Script loading error:', error);
+                container.innerHTML = `
+                    <div class="builder-loading">
+                        <span style="color:#ef4444; font-size:1.2rem;">❌ Failed to load builder script.</span>
+                        <span style="color:#94a3b8;">Please check your internet connection and try again.</span>
+                        <button class="launch-btn" style="max-width:200px; margin-top:10px; padding:12px 24px;" onclick="closeBuilderView()">
+                            Go Back
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                if (builderScriptLoaded[src]) {
+                    resolve();
+                    return;
+                }
+                const existingScript = document.querySelector(`script[src="${src}"]`);
+                if (existingScript) {
+                    builderScriptLoaded[src] = true;
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                script.onload = () => {
+                    builderScriptLoaded[src] = true;
+                    resolve();
+                };
+                script.onerror = () => {
+                    reject(new Error(`Failed to load script: ${src}`));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        function closeBuilderView() {
+            const builderView = document.getElementById('builderView');
+            builderView.classList.remove('active');
+            setTimeout(() => {
+                const container = document.getElementById('liveBuilderContainer');
+                container.innerHTML = `
+                    <div class="builder-loading" id="builderLoading">
+                        <div class="spinner"></div>
+                        <span>Loading your builder...</span>
+                    </div>
+                `;
+            }, 300);
+        }
+
+        // ESC key to close overlays
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const builderView = document.getElementById('builderView');
+                const setupOverlay = document.getElementById('setupOverlay');
+                if (builderView.classList.contains('active')) {
+                    closeBuilderView();
+                } else if (setupOverlay.classList.contains('active')) {
+                    closeSetupModal();
+                }
+            }
+        });
+    </script>
+
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"e3c1c9af36de41759418005494a48906","r":1}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"e3c1c9af36de41759418005494a48906","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>
