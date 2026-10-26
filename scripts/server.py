@@ -7,6 +7,7 @@ app = Flask(__name__, static_folder=None)
 
 FREE_TLDS  = {'lyra.stu', 'taqi.lyra', 'taqi.tk', 'taqi.tl', 'lyra.tk'}
 CATEGORIES = {'ai', 'web', 'game', 'other'}
+REGISTRY   = 'domains/registry.html'          # ← single file
 
 GITHUB_TOKEN  = os.environ.get('GITHUB_TOKEN', '')
 GITHUB_REPO   = os.environ.get('GITHUB_REPOSITORY', '')
@@ -57,20 +58,39 @@ def gh_put(path, text, message):
     return (r.status_code in (200, 201)), r.text[:300]
 
 
-def domain_template(tld):
-    return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8">
-<title>.{tld} · Lyra Registry</title>
-<style>
-body{{background:#07070c;color:#e9e9f2;font-family:ui-monospace,monospace;padding:28px}}
-h1{{color:#a78bfa}} code{{color:#22d3ee}}
-.lyra-target{{white-space:pre-wrap;background:#0e0e18;border:1px solid #2a2a44;
-  border-radius:12px;padding:16px;line-height:1.9}}
-</style></head><body>
-<h1>.{tld} · Lyra Domain Registry</h1>
-<p>Format: <code>name=category/file.html</code></p>
-<pre class="lyra-target"></pre>
-</body></html>'''
+# ---------- registry helpers ----------
+
+def _registry_block_re(tld):
+    return re.compile(
+        r'(<pre\b[^>]*\bdata-tld=["\']' + re.escape(tld) + r'["\'][^>]*>)'
+        r'(.*?)'
+        r'(</pre>)',
+        re.DOTALL
+    )
+
+
+def registry_entries(tld, content):
+    """Return the set of lines already in <pre data-tld=tld>."""
+    m = _registry_block_re(tld).search(content)
+    if not m:
+        return None
+    return {ln.strip() for ln in m.group(2).splitlines() if ln.strip()}
+
+
+def add_entry(tld, line):
+    """Append `line` inside the .tld block of domains/registry.html."""
+    content = gh_get(REGISTRY)
+    if content is None:
+        return False, 'domains/registry.html not found'
+    m = _registry_block_re(tld).search(content)
+    if not m:
+        return False, f'no <pre data-tld="{tld}"> block in registry.html'
+    existing = {ln.strip() for ln in m.group(2).splitlines() if ln.strip()}
+    if line in existing:
+        return True, 'already present'
+    new_inner = (m.group(2).rstrip('\n') + '\n' + line + '\n').lstrip('\n')
+    new_content = content[:m.start(2)] + new_inner + content[m.end(2):]
+    return gh_put(REGISTRY, new_content, f'registry: add {line} → .{tld}')
 
 
 # ---------- routes ----------
@@ -112,17 +132,9 @@ def submit():
     if not ok:
         return jsonify(ok=False, error='commit failed: ' + msg), 500
 
-    dpath = f'domains/{tld}.html'
-    dfile = gh_get(dpath) or domain_template(tld)
-    line  = f'{slug}={category}/{slug}.html'
-    if line not in dfile:
-        if '</pre>' in dfile:
-            dfile = dfile.replace('</pre>', f'\n{line}\n</pre>', 1)
-        else:
-            dfile += f'\n<pre class="lyra-target">{line}</pre>'
-        ok2, msg2 = gh_put(dpath, dfile, f'Map {slug}.{tld}')
-        if not ok2:
-            return jsonify(ok=False, error='domain map failed: ' + msg2), 500
+    ok2, msg2 = add_entry(tld, f'{slug}={path}')
+    if not ok2:
+        return jsonify(ok=False, error='registry failed: ' + msg2), 500
 
     base = pages_url()
     return jsonify(ok=True,
